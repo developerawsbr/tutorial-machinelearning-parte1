@@ -1,0 +1,22 @@
+service: apicardetection
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+        - "s3:GetObject"
+        - "rekognition:DetectLabels"
+      Resource: "*"
+functions:
+  APIDetectCar:
+    handler: handler.detectCar
+    events:
+      - http:
+          path: /
+          method: post
+          cors: true
+      - s3: devawsapidetectcars
